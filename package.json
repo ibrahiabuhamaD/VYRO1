@@ -4,7 +4,7 @@
   "private": true,
   "description": "Real-time Arabic random video chat using WebRTC and WebSocket signaling",
   "scripts": {
-    "start": "node server.js"
+    "start": "node --env-file=1.env server.js"
   },
   "dependencies": {
     "ws": "^8.18.0"

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c0f12">
+  <title>لوحة إدارة وَصْل</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/" aria-label="العودة إلى وَصْل"><span class="brand-mark">و</span><span><strong>وَصْل</strong><small>إدارة الموقع</small></span></a>
+      <nav class="admin-nav" aria-label="أقسام لوحة الإدارة">
+        <button class="is-current" type="button" data-view="overview">نظرة عامة</button>
+        <button type="button" data-view="live">المتصلون الآن</button>
+        <button type="button" data-view="members">الأعضاء</button>
+        <button type="button" data-view="reports">البلاغات</button>
+        <button type="button" data-view="settings">إعدادات الموقع</button>
+      </nav>
+      <a class="back-to-site" href="/">العودة للموقع</a>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div><p>مساحة المشرف</p><h1 id="pageTitle">نظرة عامة</h1></div>
+        <div class="admin-identity"><span class="admin-live"></span><span id="adminEmailLabel">غير مسجل</span><button id="logoutButton" type="button" hidden>تسجيل الخروج</button></div>
+      </header>
+
+      <section class="login-panel" id="loginPanel" aria-labelledby="loginTitle">
+        <div class="login-emblem">و</div>
+        <p class="eyebrow">وَصْل · الإدارة</p>
+        <h2 id="loginTitle">دخول المشرف</h2>
+        <p class="login-copy">سجّل الدخول لإدارة الأعضاء والبلاغات وإعدادات الموقع.</p>
+        <form id="loginForm">
+          <label for="adminEmail">البريد الإلكتروني</label>
+          <input id="adminEmail" type="email" autocomplete="username" required>
+          <label for="adminPassword">كلمة المرور</label>
+          <input id="adminPassword" type="password" autocomplete="current-password" required>
+          <button class="primary-button" type="submit">دخول آمن</button>
+          <p class="form-error" id="loginError" role="alert" hidden></p>
+        </form>
+      </section>
+
+      <div class="dashboard" id="dashboard" hidden>
+        <section class="admin-view" id="view-overview">
+          <div class="section-heading"><div><h2>حالة الموقع</h2><p>ملخص مباشر للعضويات والاتصالات.</p></div><button class="quiet-button" id="refreshButton" type="button">تحديث البيانات</button></div>
+          <div class="stats-grid">
+            <article class="stat-tile"><span>متصلون الآن</span><strong id="onlineStat">0</strong></article>
+            <article class="stat-tile"><span>إجمالي الأعضاء</span><strong id="membersStat">0</strong></article>
+            <article class="stat-tile"><span>أعضاء مفعّلون</span><strong id="activeStat">0</strong></article>
+            <article class="stat-tile stat-alert"><span>بلاغات مفتوحة</span><strong id="reportsStat">0</strong></article>
+          </div>
+          <div class="overview-columns">
+            <section class="data-section"><div class="section-heading"><div><h2>آخر البلاغات</h2><p>المراجعة والإجراء من قسم البلاغات.</p></div><button class="text-button" type="button" data-view="reports">عرض الكل</button></div><div id="recentReports" class="recent-list"></div></section>
+            <section class="data-section"><div class="section-heading"><div><h2>حالة المنصة</h2><p>الإعدادات الحالية.</p></div></div><div id="platformStatus" class="platform-status"></div></section>
+          </div>
+        </section>
+
+        <section class="admin-view" id="view-members" hidden>
+          <div class="section-heading"><div><h2>إدارة الأعضاء</h2><p>إدارة حالة الحسابات المسجلة ومراجعة آخر نشاط.</p></div><input class="search-input" id="memberSearch" type="search" placeholder="بحث بالاسم أو البريد"></div>
+          <div class="table-wrap"><table><thead><tr><th>العضو</th><th>المزود</th><th>الحالة</th><th>آخر نشاط</th><th>إجراءات</th></tr></thead><tbody id="memberRows"></tbody></table><p class="empty-state" id="membersEmpty" hidden>لا توجد عضويات مطابقة.</p></div>
+        </section>
+
+        <section class="admin-view" id="view-live" hidden>
+          <div class="section-heading"><div><h2>المتصلون الآن</h2><p>حالة الاتصال والمطابقة فقط؛ لا يتم عرض أو تسجيل الصوت والفيديو.</p></div><span class="live-refresh-note">يتحدث تلقائيًا كل 5 ثوانٍ</span></div>
+          <div class="live-summary"><span class="admin-live"></span><strong id="liveOnlineCount">0</strong><span>جلسات متصلة</span><span class="summary-divider"></span><strong id="liveMatchCount">0</strong><span>أطراف في لقاءات</span></div>
+          <div class="table-wrap"><table><thead><tr><th>المستخدم</th><th>نوع الجلسة</th><th>الحالة</th><th>الطرف الآخر</th><th>بدأ الاتصال</th><th>إجراء</th></tr></thead><tbody id="liveRows"></tbody></table><p class="empty-state" id="liveEmpty" hidden>لا توجد جلسات متصلة الآن.</p></div>
+        </section>
+
+        <section class="admin-view" id="view-reports" hidden>
+          <div class="section-heading"><div><h2>مراجعة البلاغات</h2><p>تظهر البلاغات الواردة من جلسات الفيديو هنا.</p></div><select id="reportFilter" aria-label="تصفية البلاغات"><option value="open">مفتوحة</option><option value="all">الكل</option><option value="resolved">تمت مراجعتها</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>المُبلّغ</th><th>الحساب المُبلّغ عنه</th><th>السبب</th><th>التاريخ</th><th>الحالة والإجراء</th></tr></thead><tbody id="reportRows"></tbody></table><p class="empty-state" id="reportsEmpty" hidden>لا توجد بلاغات في هذا العرض.</p></div>
+        </section>
+
+        <section class="admin-view" id="view-settings" hidden>
+          <div class="section-heading"><div><h2>إعدادات الموقع</h2><p>تُحفظ على الخادم وتُطبّق على الواجهة والمطابقة.</p></div></div>
+          <form class="settings-form" id="settingsForm">
+            <label class="field-label" for="siteName">اسم الموقع<input id="siteName" name="siteName" maxlength="80" required></label>
+            <label class="field-label" for="tagline">العبارة التعريفية<input id="tagline" name="tagline" maxlength="80"></label>
+            <label class="field-label full-field" for="announcement">إعلان يظهر للزوار<textarea id="announcement" name="announcement" maxlength="500" rows="3"></textarea></label>
+            <div class="switch-list">
+              <label><input id="matchingEnabled" name="matchingEnabled" type="checkbox"><span>السماح بمطابقة الفيديو</span></label>
+              <label><input id="maintenance" name="maintenance" type="checkbox"><span>تفعيل وضع الصيانة</span></label>
+              <label><input id="registrationsEnabled" name="registrationsEnabled" type="checkbox"><span>السماح بالتسجيل الاجتماعي</span></label>
+              <label><input id="allowGuestAccess" name="allowGuestAccess" type="checkbox"><span>السماح بدخول الزوار دون حساب</span></label>
+            </div>
+            <div class="full-field form-actions"><button class="primary-button" type="submit">حفظ إعدادات الموقع</button><p id="settingsMessage" role="status"></p></div>
+          </form>
+
+          <section class="credentials-section">
+            <div class="section-heading"><div><h2>حساب المشرف</h2><p>تغيير البريد أو كلمة المرور يتطلب كلمة المرور الحالية.</p></div></div>
+            <form class="credentials-form" id="credentialsForm">
+              <label class="field-label" for="currentPassword">كلمة المرور الحالية<input id="currentPassword" type="password" autocomplete="current-password" required></label>
+              <label class="field-label" for="newAdminEmail">البريد الجديد<input id="newAdminEmail" type="email" autocomplete="email" required></label>
+              <label class="field-label" for="newAdminPassword">كلمة مرور جديدة<input id="newAdminPassword" type="password" minlength="12" autocomplete="new-password" placeholder="اتركها فارغة للإبقاء عليها"></label>
+              <p class="form-hint full-field">استخدم كلمة مرور جديدة لا تقل عن 12 حرفًا. لا يُنصح بإعادة استخدام كلمة المرور الابتدائية.</p>
+              <div class="full-field form-actions"><button class="quiet-button" type="submit">تحديث بيانات المشرف</button><p id="credentialsMessage" role="status"></p></div>
+            </form>
+          </section>
+        </section>
+      </div>
+      <div class="admin-toast" id="adminToast" role="status" aria-live="polite"></div>
+    </main>
+  </div>
+</body>
+</html>

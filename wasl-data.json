@@ -1,0 +1,35 @@
+{
+  "settings": {
+    "siteName": "واصل",
+    "tagline": "محادثة تبدأ بلحظة",
+    "announcement": "",
+    "maintenance": false,
+    "matchingEnabled": true,
+    "registrationsEnabled": true,
+    "allowGuestAccess": true,
+    "minimumAge": 18
+  },
+  "credentials": {
+    "email": "ibr.jxx@gmail.com",
+    "salt": "c4998375ec7295e230305ac85db23df0",
+    "hash": "5e2fd264d285c97343bb0b326806cde2b941b6e21ced72c869e49d4ff37d8592"
+  },
+  "users": [],
+  "reports": [],
+  "moderationLog": [
+    {
+      "id": "85d39dc7-fc1a-468a-91b2-a06203f9eea5",
+      "action": "delete",
+      "userId": "52e62f72-31a2-4988-a237-ab9f09da94d5",
+      "adminEmail": "ibr.jxx@gmail.com",
+      "createdAt": "2026-09-26T18:03:50.367Z"
+    },
+    {
+      "id": "232627db-91ce-4eed-b00b-a9e31260705d",
+      "action": "disconnect-session",
+      "userId": "52e62f72-31a2-4988-a237-ab9f09da94d5",
+      "adminEmail": "ibr.jxx@gmail.com",
+      "createdAt": "2026-09-26T18:03:50.359Z"
+    }
+  ]
+}

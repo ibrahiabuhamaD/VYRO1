@@ -35,6 +35,15 @@ const messageForm = document.querySelector("#messageForm");
 const messageInput = document.querySelector("#messageInput");
 const sendButton = document.querySelector("#sendButton");
 const toast = document.querySelector("#toast");
+const accountButton = document.querySelector("#accountButton");
+const accountDialog = document.querySelector("#accountDialog");
+const socialLoginPanel = document.querySelector("#socialLoginPanel");
+const signedInPanel = document.querySelector("#signedInPanel");
+const socialLoginStatus = document.querySelector("#socialLoginStatus");
+const siteNotice = document.querySelector("#siteNotice");
+const memberAuthForm = document.querySelector("#memberAuthForm");
+const memberAuthError = document.querySelector("#memberAuthError");
+let memberAuthMode = "login";
 const permissionDialog = document.querySelector("#permissionDialog");
 const permissionStorageKey = "wasl.permissions-intro.v1";
 const signalUrl = `${location.protocol === "https:" ? "wss:" : "ws:"}//${location.host}/signal`;
@@ -54,6 +63,9 @@ const state = {
   searching: false,
   currentPeer: null,
   locationGranted: false,
+  member: null,
+  csrfToken: null,
+  siteConfig: { siteName: "وَصْل", tagline: "محادثة تبدأ بلحظة", announcement: "", maintenance: false, matchingEnabled: true },
   toastTimer: null,
   matchSetup: Promise.resolve()
 };
@@ -63,6 +75,71 @@ function showToast(message) {
   toast.classList.add("visible");
   window.clearTimeout(state.toastTimer);
   state.toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 3400);
+}
+
+async function loadPublicContext() {
+  try {
+    const [siteResponse, optionsResponse, memberResponse] = await Promise.all([
+      fetch("/api/site-config"),
+      fetch("/api/auth/options"),
+      fetch("/api/auth/me", { credentials: "same-origin" })
+    ]);
+    if (siteResponse.ok) {
+      state.siteConfig = { ...state.siteConfig, ...(await siteResponse.json()) };
+      const heading = document.querySelector(".brand-lockup h1");
+      if (heading) heading.textContent = state.siteConfig.siteName;
+      const tagline = document.querySelector(".brand-lockup p");
+      if (tagline) tagline.textContent = state.siteConfig.tagline;
+      document.title = `${state.siteConfig.siteName} | محادثة فيديو مباشرة`;
+      const notice = state.siteConfig.maintenance ? "الموقع في وضع الصيانة حاليًا." : state.siteConfig.announcement;
+      siteNotice.textContent = notice || "";
+      siteNotice.hidden = !notice;
+      updateControls();
+    }
+    if (optionsResponse.ok) {
+      const options = await optionsResponse.json();
+      const providers = [
+        [document.querySelector("#googleLoginButton"), "google", options.google],
+        [document.querySelector("#facebookLoginButton"), "facebook", options.facebook]
+      ];
+      for (const [link, provider, enabled] of providers) {
+        link.href = `/auth/${provider}`;
+        link.setAttribute("aria-disabled", String(!enabled || !options.registrationsEnabled));
+        link.classList.toggle("is-unavailable", !enabled || !options.registrationsEnabled);
+      }
+      if (!options.registrationsEnabled) socialLoginStatus.textContent = "التسجيل متوقف حاليًا من لوحة الإدارة.";
+      else if (!options.google && !options.facebook) socialLoginStatus.textContent = "أضف مفاتيح Google أو Facebook إلى 1.env ثم أعد تشغيل الخادم لتفعيل التسجيل.";
+      else if (!options.google || !options.facebook) socialLoginStatus.textContent = "المزود الآخر يحتاج مفاتيح OAuth لإتاحته.";
+      else socialLoginStatus.textContent = "تتم إدارة العضويات من لوحة الإدارة.";
+    }
+    if (memberResponse.ok) {
+      const memberData = await memberResponse.json();
+      state.member = memberData.user;
+      state.csrfToken = memberData.csrfToken;
+      socialLoginPanel.hidden = Boolean(state.member);
+      signedInPanel.hidden = !state.member;
+      memberAuthForm.hidden = Boolean(state.member);
+      accountButton.textContent = state.member ? "حسابي" : "تسجيل الدخول";
+      if (state.member) {
+        document.querySelector("#accountName").textContent = state.member.name;
+        document.querySelector("#accountEmail").textContent = state.member.email;
+      }
+    }
+  } catch {
+    siteNotice.hidden = true;
+  }
+}
+
+function handleAuthResult() {
+  const result = new URLSearchParams(location.search).get("auth");
+  const messages = {
+    success: "تم تسجيل الدخول بنجاح.",
+    blocked: "هذا الحساب موقوف. تواصل مع الإدارة.",
+    error: "تعذر تسجيل الدخول. تحقق من إعداد OAuth وحاول مجددًا."
+  };
+  if (!result) return;
+  if (messages[result]) showToast(messages[result]);
+  history.replaceState(null, "", location.pathname);
 }
 
 function sendSignalMessage(message) {
@@ -123,7 +200,8 @@ function setServerConnection(online) {
 }
 
 function updateControls() {
-  startButton.disabled = state.active || !state.socket || state.socket.readyState !== WebSocket.OPEN;
+  startButton.disabled = state.active || !state.socket || state.socket.readyState !== WebSocket.OPEN
+    || state.siteConfig.maintenance || !state.siteConfig.matchingEnabled;
   stopButton.disabled = !state.active;
   nextButton.disabled = !state.active;
   cameraButton.disabled = !state.stream;
@@ -262,6 +340,10 @@ function getMediaErrorMessage(error) {
 
 async function startMeeting() {
   if (state.active || startButton.disabled) return;
+  if (state.siteConfig.maintenance || !state.siteConfig.matchingEnabled) {
+    showToast(state.siteConfig.maintenance ? "الموقع في وضع الصيانة حاليًا." : "المطابقة متوقفة مؤقتًا.");
+    return;
+  }
   startButton.disabled = true;
   setWelcomeState("searching");
   setConnectionState("searching", "جارٍ بدء اللقاء");
@@ -622,6 +704,63 @@ document.querySelector("#fullscreenButton").addEventListener("click", async () =
   }
 });
 document.querySelector("#reportButton").addEventListener("click", reportCurrentPeer);
+accountButton.addEventListener("click", () => accountDialog.showModal());
+document.querySelectorAll(".social-login").forEach((link) => link.addEventListener("click", (event) => {
+  if (link.getAttribute("aria-disabled") === "true") {
+    event.preventDefault();
+    showToast("إعداد تسجيل الدخول الاجتماعي مطلوب من مسؤول الخادم.");
+  }
+}));
+document.querySelector("#accountLogoutButton").addEventListener("click", async () => {
+  await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin" });
+  location.reload();
+});
+function setMemberAuthMode(mode) {
+  memberAuthMode = mode;
+  const registering = mode === "register";
+  document.querySelector("#memberLoginMode").classList.toggle("is-selected", !registering);
+  document.querySelector("#memberRegisterMode").classList.toggle("is-selected", registering);
+  document.querySelector("#memberNameField").hidden = !registering;
+  document.querySelector("#memberName").required = registering;
+  const password = document.querySelector("#memberPassword");
+  password.minLength = registering ? 12 : 1;
+  password.autocomplete = registering ? "new-password" : "current-password";
+  document.querySelector("#passwordHint").hidden = !registering;
+  document.querySelector("#memberAuthSubmit").textContent = registering ? "إنشاء الحساب" : "دخول بالبريد";
+}
+setMemberAuthMode("login");
+document.querySelector("#memberLoginMode").addEventListener("click", () => setMemberAuthMode("login"));
+document.querySelector("#memberRegisterMode").addEventListener("click", () => setMemberAuthMode("register"));
+memberAuthForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const submit = document.querySelector("#memberAuthSubmit");
+  memberAuthError.hidden = true;
+  submit.disabled = true;
+  try {
+    const response = await fetch(`/api/auth/${memberAuthMode}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "same-origin",
+      body: JSON.stringify({
+        name: document.querySelector("#memberName").value,
+        email: document.querySelector("#memberEmail").value,
+        password: document.querySelector("#memberPassword").value
+      })
+    });
+    const result = await response.json();
+    if (!response.ok) throw new Error(result.error || "تعذر تسجيل الدخول.");
+    if (result.role === "admin") {
+      location.assign("/admin");
+      return;
+    }
+    location.reload();
+  } catch (error) {
+    memberAuthError.textContent = error.message;
+    memberAuthError.hidden = false;
+  } finally {
+    submit.disabled = false;
+  }
+});
 document.querySelector("#rulesButton").addEventListener("click", () => document.querySelector("#safetyDialog").showModal());
 document.querySelector("#termsButton").addEventListener("click", () => document.querySelector("#safetyDialog").showModal());
 navigator.mediaDevices?.addEventListener?.("devicechange", refreshAudioDevices);
@@ -641,3 +780,5 @@ connectSignalServer().catch(() => {
   setServerConnection(false);
   updateControls();
 });
+void loadPublicContext();
+handleAuthResult();

@@ -37,6 +37,10 @@
       <section class="welcome-pane" aria-label="وَصْل، محادثات مباشرة">
         <video class="remote-video" id="remoteVideo" autoplay playsinline></video>
         <div class="welcome-pattern" aria-hidden="true"></div>
+        <div class="member-access">
+          <button id="accountButton" type="button">تسجيل الدخول</button>
+        </div>
+        <div class="site-notice" id="siteNotice" hidden></div>
         <div class="peer-caption" id="peerCaption" hidden><span class="peer-live"></span><strong id="peerCountry">متصل جديد</strong><span id="peerGender"></span></div>
         <div class="welcome-content">
           <div class="brand-lockup" id="welcomeIdle">
@@ -79,9 +83,11 @@
         <div class="remote-topbar">
           <div class="connection-pill" id="connectionPill"><span></span><strong id="connectionLabel">غير متصل</strong></div>
           <div class="video-actions">
-            <button class="video-icon-button" id="reportButton" type="button" aria-label="إبلاغ عن الطرف الآخر" title="إبلاغ"><svg><use href="#i-report"/></svg></button>
+            <button class="video-icon-button" id="cameraButton" type="button" aria-label="إيقاف الكاميرا" aria-pressed="false" title="إيقاف الكاميرا" disabled><svg><use href="#i-video"/></svg></button>
+            <button class="video-icon-button" id="micButton" type="button" aria-label="كتم الميكروفون" aria-pressed="false" title="كتم الميكروفون" disabled><svg><use href="#i-mic"/></svg></button>
             <button class="video-icon-button" id="settingsButton" type="button" aria-label="الإعدادات" title="الإعدادات"><svg><use href="#i-settings"/></svg></button>
             <button class="video-icon-button" id="fullscreenButton" type="button" aria-label="ملء الشاشة" title="ملء الشاشة"><svg><use href="#i-expand"/></svg></button>
+            <button class="video-icon-button" id="reportButton" type="button" aria-label="إبلاغ عن الطرف الآخر" title="إبلاغ"><svg><use href="#i-report"/></svg></button>
           </div>
         </div>
         <button class="next-float" id="nextButton" type="button" disabled><svg><use href="#i-skip"/></svg><span>التالي</span></button>
@@ -100,8 +106,6 @@
       <section class="right-footer" aria-label="الرسائل وأجهزة الصوت">
         <div class="device-row">
           <div class="device-select"><svg><use href="#i-mic"/></svg><label class="visually-hidden" for="audioDeviceSelect">الميكروفون</label><select id="audioDeviceSelect" aria-label="الميكروفون"><option value="">الميكروفون الافتراضي</option></select></div>
-          <button class="device-toggle" id="micButton" type="button" aria-label="كتم الميكروفون" aria-pressed="false" title="كتم الميكروفون"><svg><use href="#i-mic"/></svg></button>
-          <button class="device-toggle" id="cameraButton" type="button" aria-label="إيقاف الكاميرا" aria-pressed="false" title="إيقاف الكاميرا"><svg><use href="#i-video"/></svg></button>
         </div>
         <div class="rules-note"><img src="assets/brand/mark.svg" alt="" width="26" height="26"><p>بالضغط على «ابدأ» أنت توافق على <button type="button" id="termsButton">قواعد المجتمع</button>. يُرجى إبقاء وجهك ظاهرًا أثناء اللقاء.</p><svg class="note-shield"><use href="#i-shield"/></svg></div>
         <div class="chat-area" id="chatArea">
@@ -125,6 +129,31 @@
     <p class="dialog-note">سيطلب المتصفح الإذن بعد المتابعة. يمكنك رفض الموقع واختيار بلدك يدويًا؛ رفض الكاميرا أو الميكروفون يمنع بدء الفيديو.</p>
     <button class="dialog-done" id="allowPermissionsButton" type="button">متابعة وطلب الأذونات</button>
     <button class="dialog-skip" id="skipPermissionsButton" type="button">ليس الآن</button>
+  </dialog>
+
+  <dialog class="settings-dialog auth-dialog" id="accountDialog" aria-labelledby="accountTitle">
+    <form method="dialog" class="dialog-close-form"><button class="dialog-close" aria-label="إغلاق"><svg><use href="#i-close"/></svg></button></form>
+    <span class="dialog-icon"><svg><use href="#i-users"/></svg></span>
+    <p class="dialog-eyebrow">عضوية وَصْل</p>
+    <h2 id="accountTitle">حسابك</h2>
+    <div id="signedInPanel" hidden>
+      <p class="account-profile"><strong id="accountName"></strong><span id="accountEmail"></span></p>
+      <button class="dialog-secondary" id="accountLogoutButton" type="button">تسجيل الخروج</button>
+    </div>
+    <div id="socialLoginPanel">
+      <div class="auth-mode" role="group" aria-label="نوع الدخول"><button class="is-selected" id="memberLoginMode" type="button">تسجيل الدخول</button><button id="memberRegisterMode" type="button">إنشاء حساب</button></div>
+      <form class="member-auth-form" id="memberAuthForm">
+        <label class="auth-name-field" id="memberNameField" for="memberName" hidden>الاسم<input id="memberName" type="text" maxlength="100" autocomplete="name"></label>
+        <label for="memberEmail">البريد الإلكتروني<input id="memberEmail" type="email" autocomplete="email" required></label>
+        <label for="memberPassword">كلمة المرور<input id="memberPassword" type="password" autocomplete="current-password" required><small id="passwordHint" hidden>لإنشاء الحساب، استخدم 12 حرفًا على الأقل.</small></label>
+        <button class="dialog-done" id="memberAuthSubmit" type="submit">دخول بالبريد</button>
+        <p class="form-error" id="memberAuthError" role="alert" hidden></p>
+      </form>
+      <div class="social-divider"><span>أو باستخدام</span></div>
+      <a class="social-login google-login" id="googleLoginButton" href="/auth/google" aria-disabled="true"><span aria-hidden="true">G</span> المتابعة باستخدام Google</a>
+      <a class="social-login facebook-login" id="facebookLoginButton" href="/auth/facebook" aria-disabled="true"><span aria-hidden="true">f</span> المتابعة باستخدام Facebook</a>
+      <p class="dialog-note" id="socialLoginStatus">التسجيل الاجتماعي متاح عند إعداد مفاتيح المزود على الخادم.</p>
+    </div>
   </dialog>
 
   <dialog class="settings-dialog" id="settingsDialog" aria-labelledby="settingsTitle">

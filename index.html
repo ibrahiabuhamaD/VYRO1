@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111012">
+  <meta name="description" content="وَصْل، محادثات فيديو مباشرة بين أشخاص حقيقيين.">
+  <title>وَصْل | محادثة فيديو مباشرة</title>
+  <link rel="icon" type="image/svg+xml" href="assets/brand/mark.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <svg class="icon-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+    <symbol id="i-video-off" viewBox="0 0 24 24"><path d="m2 2 20 20M10.7 5H14a2 2 0 0 1 2 2v2l5-3v12l-5-3v2a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7c0-.6.3-1.2.8-1.6"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></symbol>
+    <symbol id="i-mic-off" viewBox="0 0 24 24"><path d="m2 2 20 20M9 9v3a3 3 0 0 0 5.1 2.1M15 9V5a3 3 0 0 0-5.8-1M5 10v2a7 7 0 0 0 11.8 5M19 10v2m-7 7v3m-4 0h8"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a2 2 0 0 1-2.8 2.8l-.1-.1a2 2 0 0 0-3.4 1.4v.2a2 2 0 0 1-4 0v-.2a2 2 0 0 0-3.4-1.4l-.1.1a2 2 0 0 1-2.8-2.8l.1-.1A2 2 0 0 0 1.6 12h-.2a2 2 0 0 1 0-4h.2A2 2 0 0 0 3 4.6l-.1-.1a2 2 0 0 1 2.8-2.8l.1.1A2 2 0 0 0 9.2.4V.2a2 2 0 0 1 4 0v.2a2 2 0 0 0 3.4 1.4l.1-.1a2 2 0 0 1 2.8 2.8l-.1.1a2 2 0 0 0 1.4 3.4h.2a2 2 0 0 1 0 4h-.2a2 2 0 0 0-1.4 3.4Z" transform="translate(1 2) scale(.92)"/></symbol>
+    <symbol id="i-expand" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></symbol>
+    <symbol id="i-skip" viewBox="0 0 24 24"><path d="M5 5v14l11-7L5 5Zm14 0v14"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol>
+    <symbol id="i-tv" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="m8 2 4 4 4-4M8 11h5v4H8zm9 0h.01M17 15h.01"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2m6-10a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm10 10v-2a4 4 0 0 0-3-3.9m-1-11.9a4 4 0 0 1 0 7.8"/></symbol>
+    <symbol id="i-report" viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18.2A2 2 0 0 0 3.5 21h17a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></symbol>
+    <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <main class="video-grid" aria-label="محادثة وَصْل">
+      <section class="welcome-pane" aria-label="وَصْل، محادثات مباشرة">
+        <video class="remote-video" id="remoteVideo" autoplay playsinline></video>
+        <div class="welcome-pattern" aria-hidden="true"></div>
+        <div class="peer-caption" id="peerCaption" hidden><span class="peer-live"></span><strong id="peerCountry">متصل جديد</strong><span id="peerGender"></span></div>
+        <div class="welcome-content">
+          <div class="brand-lockup" id="welcomeIdle">
+            <img src="assets/brand/mark.svg" alt="" width="170" height="170">
+            <h1>وَصْل<span>.</span></h1>
+            <p>محادثة تبدأ بلحظة</p>
+          </div>
+          <div class="welcome-search" id="welcomeSearching" hidden>
+            <span class="search-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <p class="welcome-state-label">لقاء مباشر</p>
+            <h2 id="welcomeSearchTitle">نبحث عن شخص متصل...</h2>
+            <p class="welcome-state-hint">سنوصلك بأول شخص متاح.</p>
+          </div>
+          <div class="welcome-match" id="welcomeMatched" hidden>
+            <span class="welcome-match-icon"><svg><use href="#i-check"/></svg></span>
+            <p class="welcome-state-label">تم العثور على متصل</p>
+            <h2 id="welcomeMatchTitle">جارٍ توصيل الفيديو...</h2>
+            <p class="welcome-state-hint" id="welcomeMatchHint">المكالمة مباشرة بين الجهازين.</p>
+          </div>
+          <div class="online-status"><span class="online-pulse"></span><strong id="onlineCount">0</strong><span>متصلون الآن</span></div>
+          <p class="server-caption" id="serverCaption">جارٍ الاتصال بالخادم...</p>
+          <div class="welcome-badges">
+            <div class="feature-badge"><span class="badge-icon"><svg><use href="#i-tv"/></svg></span><span><strong>فيديو مباشر</strong><small>مع أشخاص حقيقيين</small></span></div>
+            <div class="feature-badge"><span class="badge-icon badge-shield"><svg><use href="#i-shield"/></svg></span><span><strong>بدون تسجيل</strong><small>لا نحفظ المحادثات</small></span></div>
+          </div>
+        </div>
+        <span class="welcome-version">وَصْل · مساحة لقاء مباشرة</span>
+      </section>
+
+      <section class="remote-pane" id="remotePane" aria-label="معاينة كاميرتك">
+        <video class="local-video" id="localVideo" autoplay playsinline muted></video>
+        <span class="local-camera-name" id="localCameraName" hidden>أنت</span>
+        <div class="camera-paused" id="localCameraPaused" hidden><svg><use href="#i-video-off"/></svg><span>الكاميرا متوقفة</span></div>
+        <div class="remote-placeholder" id="remotePlaceholder">
+          <span class="connection-orbit"><svg><use href="#i-tv"/></svg><i></i></span>
+          <p class="remote-kicker" id="remoteKicker">معاينتك</p>
+          <h2 id="remoteTitle">كاميرتك تظهر هنا</h2>
+          <p class="remote-hint" id="remoteHint">امنح إذن الكاميرا لمعاينة صورتك.</p>
+        </div>
+        <div class="remote-topbar">
+          <div class="connection-pill" id="connectionPill"><span></span><strong id="connectionLabel">غير متصل</strong></div>
+          <div class="video-actions">
+            <button class="video-icon-button" id="reportButton" type="button" aria-label="إبلاغ عن الطرف الآخر" title="إبلاغ"><svg><use href="#i-report"/></svg></button>
+            <button class="video-icon-button" id="settingsButton" type="button" aria-label="الإعدادات" title="الإعدادات"><svg><use href="#i-settings"/></svg></button>
+            <button class="video-icon-button" id="fullscreenButton" type="button" aria-label="ملء الشاشة" title="ملء الشاشة"><svg><use href="#i-expand"/></svg></button>
+          </div>
+        </div>
+        <button class="next-float" id="nextButton" type="button" disabled><svg><use href="#i-skip"/></svg><span>التالي</span></button>
+        <div class="remote-bottomline"><span id="remoteBottomStatus">لا تشارك بياناتك الشخصية</span><button id="rulesButton" type="button">قواعد الأمان</button></div>
+      </section>
+    </main>
+
+    <footer class="bottom-dock">
+      <section class="left-controls" aria-label="التحكم في اللقاء">
+        <button class="action-tile start-tile" id="startButton" type="button"><span class="tile-icon start-symbol"><i></i></span><span>ابدأ</span></button>
+        <button class="action-tile stop-tile" id="stopButton" type="button" disabled><span class="tile-icon stop-symbol"><i></i></span><span>إيقاف</span></button>
+        <label class="action-tile select-tile"><span class="tile-label">بلدي</span><span class="tile-select-wrap"><select id="countrySelect" aria-label="بلدك"><option value="sa">السعودية</option><option value="eg">مصر</option><option value="ma">المغرب</option><option value="ae">الإمارات</option><option value="jo">الأردن</option><option value="other">دولة أخرى</option></select><svg><use href="#i-globe"/></svg></span></label>
+        <label class="action-tile select-tile"><span class="tile-label">أنا</span><span class="tile-select-wrap"><select id="genderSelect" aria-label="اختر هويتك"><option value="women">امرأة</option><option value="men">رجل</option><option value="other">أخرى</option></select><span class="identity-mark">●</span></span></label>
+      </section>
+
+      <section class="right-footer" aria-label="الرسائل وأجهزة الصوت">
+        <div class="device-row">
+          <div class="device-select"><svg><use href="#i-mic"/></svg><label class="visually-hidden" for="audioDeviceSelect">الميكروفون</label><select id="audioDeviceSelect" aria-label="الميكروفون"><option value="">الميكروفون الافتراضي</option></select></div>
+          <button class="device-toggle" id="micButton" type="button" aria-label="كتم الميكروفون" aria-pressed="false" title="كتم الميكروفون"><svg><use href="#i-mic"/></svg></button>
+          <button class="device-toggle" id="cameraButton" type="button" aria-label="إيقاف الكاميرا" aria-pressed="false" title="إيقاف الكاميرا"><svg><use href="#i-video"/></svg></button>
+        </div>
+        <div class="rules-note"><img src="assets/brand/mark.svg" alt="" width="26" height="26"><p>بالضغط على «ابدأ» أنت توافق على <button type="button" id="termsButton">قواعد المجتمع</button>. يُرجى إبقاء وجهك ظاهرًا أثناء اللقاء.</p><svg class="note-shield"><use href="#i-shield"/></svg></div>
+        <div class="chat-area" id="chatArea">
+          <div class="chat-stream" id="chatStream" aria-live="polite"><p class="chat-empty" id="chatEmpty">ستظهر رسائلكما هنا بعد الاتصال.</p></div>
+          <form class="message-form" id="messageForm"><label class="visually-hidden" for="messageInput">اكتب رسالة</label><input id="messageInput" type="text" maxlength="500" placeholder="اكتب رسالة..." autocomplete="off" disabled><button id="sendButton" type="submit" aria-label="إرسال الرسالة" disabled><svg><use href="#i-send"/></svg></button></form>
+        </div>
+      </section>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog class="settings-dialog permission-dialog" id="permissionDialog" aria-labelledby="permissionTitle">
+    <span class="dialog-icon permission-icon"><svg><use href="#i-video"/></svg></span>
+    <p class="dialog-eyebrow">إعداد سريع لمرة واحدة</p>
+    <h2 id="permissionTitle">جهّز أذونات اللقاء</h2>
+    <div class="permission-list">
+      <div><span class="permission-check"><svg><use href="#i-check"/></svg></span><span><strong>الكاميرا والميكروفون</strong><small>لتظهر وتسمع الطرف الآخر.</small></span></div>
+      <div><span class="permission-check location-check"><svg><use href="#i-globe"/></svg></span><span><strong>الموقع التقريبي</strong><small>اختياري؛ لا نرسل الإحداثيات أو نخزنها.</small></span></div>
+    </div>
+    <p class="dialog-note">سيطلب المتصفح الإذن بعد المتابعة. يمكنك رفض الموقع واختيار بلدك يدويًا؛ رفض الكاميرا أو الميكروفون يمنع بدء الفيديو.</p>
+    <button class="dialog-done" id="allowPermissionsButton" type="button">متابعة وطلب الأذونات</button>
+    <button class="dialog-skip" id="skipPermissionsButton" type="button">ليس الآن</button>
+  </dialog>
+
+  <dialog class="settings-dialog" id="settingsDialog" aria-labelledby="settingsTitle">
+    <form method="dialog" class="dialog-close-form"><button class="dialog-close" aria-label="إغلاق"><svg><use href="#i-close"/></svg></button></form>
+    <span class="dialog-icon"><svg><use href="#i-settings"/></svg></span>
+    <p class="dialog-eyebrow">تخصيص اللقاء</p><h2 id="settingsTitle">إعدادات المطابقة</h2>
+    <label class="dialog-field" for="lookingForSelect">أرغب بالتحدث مع<select id="lookingForSelect"><option value="everyone">الجميع</option><option value="women">نساء</option><option value="men">رجال</option></select></label>
+    <p class="dialog-note">اختيارات البلد والهوية يحددها المستخدم بنفسه ولا يتم التحقق منها. لا نحتفظ بتسجيلات الفيديو أو الرسائل.</p>
+    <button class="dialog-secondary" id="permissionSettingsButton" type="button">إعداد أذونات الكاميرا والموقع</button>
+    <button class="dialog-done" id="saveSettingsButton" type="button">حفظ الإعدادات</button>
+  </dialog>
+
+  <dialog class="settings-dialog safety-dialog" id="safetyDialog" aria-labelledby="safetyTitle">
+    <form method="dialog" class="dialog-close-form"><button class="dialog-close" aria-label="إغلاق"><svg><use href="#i-close"/></svg></button></form>
+    <span class="dialog-icon safety-icon"><svg><use href="#i-shield"/></svg></span>
+    <p class="dialog-eyebrow">إرشادات المجتمع</p><h2 id="safetyTitle">خلّ اللقاء آمنًا</h2>
+    <ul class="safety-list"><li>لا تشارك رقمك أو عنوانك أو بياناتك المالية.</li><li>إذا شعرت بعدم الارتياح، أنهِ اللقاء أو انتقل فورًا.</li><li>الإبلاغ ينهي اتصالك بالطرف الحالي.</li><li>اختر «إيقاف» لإنهاء اللقاء وإغلاق الكاميرا والميكروفون.</li></ul>
+    <form method="dialog"><button class="dialog-done">فهمت</button></form>
+  </dialog>
+</body>
+</html>

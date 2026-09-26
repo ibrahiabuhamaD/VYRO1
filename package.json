@@ -1,0 +1,12 @@
+{
+  "name": "wasl-live-chat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Real-time Arabic random video chat using WebRTC and WebSocket signaling",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
